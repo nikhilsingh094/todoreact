@@ -1,8 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+
+
+// to get data from localstorage
+
+const getLocalItem = ()=>{
+  let list = localStorage.getItem('lists')
+
+  if(list){
+    return JSON.parse(localStorage.getItem('lists'));
+  }else{
+    return [];
+  }
+}
 
 const Todo = () => {
   const [data, setData] = useState("");
-  const [item, setItem] = useState([]);
+  const [item, setItem] = useState(getLocalItem());
 
   const addItem = () => {
     if (!data) {
@@ -12,16 +26,28 @@ const Todo = () => {
     }
   };
 
-  const deletItem = (id) => {
+  //delete items
+    const deletItem = (id) => {
     const updateItem = item.filter((elm, ind) => {
       return ind !== id;
     });
     setItem(updateItem);
   };
 
+// remove all
   const removeAll = () => {
     setItem([]);
   };
+
+
+  //add data to local storage
+
+  useEffect(()=>{
+    localStorage.setItem('lists',JSON.stringify(item))
+  },[item])
+
+
+
 
   return (
     <>
